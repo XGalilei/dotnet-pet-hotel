@@ -22,5 +22,13 @@ namespace pet_hotel.Controllers
         public IEnumerable<PetOwner> GetPets() {
             return new List<PetOwner>();
         }
+
+        //currently a stub for /POST
+        [HttpPost]
+        public IActionResult Create(PetOwner owner) {
+            return null;   
+        }
+
+
     }
 }
