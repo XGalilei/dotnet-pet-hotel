@@ -33,9 +33,11 @@ namespace pet_hotel
         [Required]
         public string name {get; set;}
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         [Required]
         public PetBreedType breed {get; set;}
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         [Required]
         public PetColorType color {get; set;}
 
@@ -44,13 +46,15 @@ namespace pet_hotel
 
         [ForeignKey("PetOwner"), Required]
         public int petOwnerid { get; set; }
+
+        public PetOwner petOwner {get; set;}
         
-        public Pet(string name, PetBreedType breed, PetColorType color, int petOwnerid) {
-            this.name = name;
-            this.breed = breed;
-            this.color = color;
-            this.petOwnerid = petOwnerid;
-        }
+        //public Pet(string name, PetBreedType breed, PetColorType color, int petOwnerid) {
+        //    this.name = name;
+        //    this.breed = breed;
+       //     this.color = color;
+       //     this.petOwnerid = petOwnerid;
+        //}
 
     }
 }

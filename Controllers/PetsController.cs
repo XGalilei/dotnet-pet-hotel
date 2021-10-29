@@ -21,11 +21,64 @@ namespace pet_hotel.Controllers
 
         // This is just a stub for GET / to prevent any weird frontend errors that 
         // occur when the route is missing in this controller
+
         [HttpGet]
-        public IEnumerable<Pet> GetPets() {
-            return new List<Pet>();
+        public IEnumerable<Pet> GetPets()
+        {
+            return _context.Pets
+            .Include(owner => owner.petOwner);
         }
 
+
+
+        [HttpPost]
+        public Pet Post(Pet pet) {
+            _context.Add(pet);
+            _context.SaveChanges();
+            return pet;
+        }
+
+        [HttpPut("{id}")]
+        public Pet Put(int id, Pet pet)
+        {
+            pet.id = id;
+            _context.Update(pet);
+            _context.SaveChanges();
+            return pet;
+        }
+
+        //is this attribute format correct for checking in?
+        [HttpPut("{id}")]
+        public Pet CheckIn(int id, Pet pet) {
+            pet.id = id;
+            pet.checkedInAt = DateTime.UtcNow;
+            Console.WriteLine(pet.ToString());
+            _context.Update(pet);
+            _context.SaveChanges();
+            return pet;
+        }
+
+        [HttpPut("{id}")]
+        public Pet CheckOut(int id, Pet pet) {
+            pet.id = id;
+            pet.checkedInAt = null;
+            _context.Update(pet);
+            _context.SaveChanges();
+            return pet;
+
+        }
+
+        [HttpDelete("{id}")]
+        public void Delete(int id) {
+            Pet pet = _context.Pets.Find(id);
+
+            _context.Pets.Remove(pet);
+
+            _context.SaveChanges();
+        }
+        //string test = DateTime.UtcNow.ToString("o", System.Globalization.CultureInfo.InvariantCulture);
+
+        //string test2 = DateTime.UtcNow.ToString("o");
         // [HttpGet]
         // [Route("test")]
         // public IEnumerable<Pet> GetPets() {

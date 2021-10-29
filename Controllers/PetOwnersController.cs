@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace pet_hotel.Controllers
 {
 
+    [ApiController]
     [Route("api/[controller]")]
     public class PetOwnersController : ControllerBase
     {
@@ -17,29 +18,22 @@ namespace pet_hotel.Controllers
             _context = context;
         }
 
-        // This is just a stub for GET / to prevent any weird frontend errors that 
-        // occur when the route is missing in this controller
-        [HttpGet]
-        public IEnumerable<PetOwner> GetPets()
-        {
-            return new List<PetOwner>();
-        }
+
 
         [HttpGet]
-        public IEnumerable<PetOwner> GetPetOwners() 
-    {
-        return _context.PetOwners
-            // Include the `bakedBy` property
-            // which is a list of `Baker` objects
-            // .NET will do a JOIN for us!
-            .Include(owner => owner.id);
-    }
+        public IEnumerable<PetOwner> GetOwners()
+        {
+            return _context.PetOwners
+            //.Include(pet => pet.pets.Count)
+            ;
+            //Include is probably the way to go, the question is what?
+        }
 
         [HttpGet("{id}")]
         public ActionResult<PetOwner> GetById(int id)
         {
             PetOwner owner = _context.PetOwners
-                .SingleOrDefault(PetOwner => PetOwner.id == id);
+                .SingleOrDefault(owner => owner.id == id);
 
             if (owner is null)
             {
@@ -70,7 +64,17 @@ namespace pet_hotel.Controllers
             return owner;
         }
 
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            // Find the bread, by ID
+            PetOwner owner = _context.PetOwners.Find(id);
 
+            // Tell the DB that we want to remove this bread
+            _context.PetOwners.Remove(owner);
 
+            // ...and save the changes to the database
+            _context.SaveChanges(); 
+        }
     }
 }
